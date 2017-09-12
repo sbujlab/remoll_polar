@@ -1,4 +1,6 @@
-/vis/open OGLIQt 1200x600
+#/vis/open OGLIQt 1200x600
+/vis/open OGL 600x600-0+0  
+
 
 /control/execute vis/vis.mac
 
