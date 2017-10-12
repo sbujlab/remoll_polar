@@ -193,17 +193,17 @@ int main(int argc, char** argv){
 #endif
 
 	session->SessionStart();
-cout<<"good 4"<<endl;
+	//cout<<"good 4"<<endl;
 	delete session;
     }
     else           // Batch mode - not using the GUI
     {
-cout<<"good batch"<<endl;
+      //cout<<"good batch"<<endl;
 #ifdef G4VIS_USE
 	visManager->SetVerboseLevel("quiet");
 #endif
 
-cout<<"good 6"<<endl;
+	//cout<<"good 6"<<endl;
 	//these line will execute a macro without the GUI
 	//in GEANT4 a macro is executed when it is passed to the command, /control/execute
 	G4String command = "/control/execute ";
@@ -214,13 +214,13 @@ cout<<"good 6"<<endl;
 	 * */
 	rundata->SetMacroFile(argv[1]);
 
-cout<<"good 7"<<endl;
+	//cout<<"good 7"<<endl;
 
 	UI->ApplyCommand(command+fileName);
 	remollRun::GetRun()->GetData()->Print();
     }
 
-cout<<"good 8"<<endl;
+    //cout<<"good 8"<<endl;
     //if one used the GUI then delete it
 #ifdef G4VIS_USE
     delete visManager;
