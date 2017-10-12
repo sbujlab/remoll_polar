@@ -46,13 +46,15 @@
 /remoll/beam_dth 0 mrad
 /remoll/beam_dph 0 mrad
 
-/remoll/gen moller  # flat generator
-#/remoll/flattype e- # flat generator pid currently e-, pi-,pi+, and pi0 supported default is e-
+#/remoll/gen moller
+
 
 
 
 #/remoll/gen beam
-#/remoll/gen elastic 
+/remoll/gen elastic
+/remoll/thmin 1.0 deg
+/remoll/thmax 40.0 deg
 #/remoll/thmin 0.1 deg
 #/remoll/thmax 2.0 deg
 #/remoll/emin 80.0 MeV
@@ -63,13 +65,15 @@
 #/remoll/piontype pi0 
 #/remoll/gen dis
 
+# flat generator
+#/remoll/flattype e- # flat generator pid currently e-, pi-,pi+, and pi0 supported default is e-
 #/remoll/gen flat  # flat generator
-/remoll/thmin 30.0 deg
+#/remoll/thmin 30.0 deg
 #/remoll/thmin 10.0 deg
-/remoll/thmax 150.0 deg
+#/remoll/thmax 150.0 deg
 #/remoll/thmax 180.0 deg
-/remoll/phmin -180.0 deg
-/remoll/phmax 180.0 deg
+#/remoll/phmin -180.0 deg
+#/remoll/phmax 180.0 deg
 #/remoll/emin  140 MeV
 #/remoll/emax 11.0 MeV
 
@@ -100,5 +104,7 @@
 #/remoll/filename remollout.root
 #/remoll/filename remoll_dis_out_test3.root
 #/remoll/filename remoll_test_pion.root
-/remoll/filename p2moller_magneticfield.root
-/run/beamOn 100
+#/remoll/filename p2moller_magneticfield.root
+/remoll/filename p2moller_ep_magneticfield.root
+
+/run/beamOn 1000000
