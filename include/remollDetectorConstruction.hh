@@ -13,6 +13,7 @@
 class remollIO;
 class G4Tubs;
 class G4LogicalVolume;
+class G4Material;
 class G4VPhysicalVolume;
 class G4VSensitiveDetector;
 class G4FieldManager;
@@ -50,7 +51,7 @@ class remollDetectorConstruction : public G4VUserDetectorConstruction
                 remollDipoleField*      fDipoleFields[__FIELDARRAYSIZE];
                 int                     index;
                 G4String 		fDetFileName;
-                
+                G4Material*  g4vacuum;
 
 		remollIO *fIO;
 
