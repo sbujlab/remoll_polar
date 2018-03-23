@@ -9,6 +9,7 @@
 #include "remollGenericDetector.hh"
 #include "G4SDManager.hh"
 
+#include "G4NistManager.hh"
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4Element.hh"
@@ -43,11 +44,11 @@ remollDetectorConstruction::remollDetectorConstruction()
 
 }
 
-remollDetectorConstruction::~remollDetectorConstruction(){;}
-
+remollDetectorConstruction::~remollDetectorConstruction(){;}   
+        
 G4VPhysicalVolume* remollDetectorConstruction::Construct()
 {
-	
+	G4NistManager* matman = G4NistManager::Instance();
 	remollBeamTarget *beamtarg = remollBeamTarget::GetBeamTarget();
 	beamtarg->Reset();
 	/////
@@ -75,6 +76,7 @@ G4VPhysicalVolume* remollDetectorConstruction::Construct()
 	// Grab the detector manager
 	
 	G4SDManager* SDman = G4SDManager::GetSDMpointer();
+        g4vacuum = matman->FindOrBuildMaterial("G4_Galactic");
 
 
 	///////////////////////////////
@@ -92,7 +94,8 @@ G4VPhysicalVolume* remollDetectorConstruction::Construct()
 	world_z = 2000.*cm;
 	starting_angle = 0.*deg;
 	spanning_angle = 360.*deg;
-	det_r = 250.*cm;
+	//det_r = 250.*cm;
+	det_r = 500.*cm;
 	det_z = 2000.*cm;
 	targ_r = 1.*cm;
 	targ_z = 10.*cm;
@@ -112,7 +115,8 @@ G4VPhysicalVolume* remollDetectorConstruction::Construct()
 		= new G4Tubs("World",0.,world_r,world_z,starting_angle,spanning_angle);
 	
 	G4LogicalVolume* world_log
-		= new G4LogicalVolume(world_cyl,Air,"World",0,0,0);
+	//	= new G4LogicalVolume(world_cyl,Air,"World",0,0,0);
+                = new G4LogicalVolume(world_cyl,g4vacuum,"World",0,0,0);
 	
 	world_log->SetVisAttributes(G4VisAttributes::Invisible);
 	
@@ -128,7 +132,8 @@ G4VPhysicalVolume* remollDetectorConstruction::Construct()
 		= new G4Tubs("Detector",0.,det_r,det_z,starting_angle,spanning_angle);
 	
 	G4LogicalVolume* det_log
-		= new G4LogicalVolume(det_cyl,Air,"Detector_log",0,0,0);
+	//	= new G4LogicalVolume(det_cyl,Air,"Detector_log",0,0,0);
+                = new G4LogicalVolume(det_cyl,g4vacuum,"Detector_log",0,0,0);
 
 	det_log->SetVisAttributes(G4VisAttributes::Invisible);
 
@@ -235,7 +240,10 @@ G4VPhysicalVolume* remollDetectorConstruction::Construct()
 		= new G4Tubs("ReadPlane",0.,readplane_r,0.1*mm,starting_angle,spanning_angle);
 	
 	G4LogicalVolume* readplane5_log
-		= new G4LogicalVolume(readplane_cyl,Air,"ReadPlane",0,0,0);
+		= new G4LogicalVolume(readplane_cyl,g4vacuum,"ReadPlane",0,0,0);
+         //       = new G4LogicalVolume(readplane_cyl,g4vacuum,"ReadPlane",0,0,0);
+
+        // g4vacuum is used for vacuum, original material is Air for all detector and mother volume. Change all g4vacuum to Air to get original configuration
 
 	remollGenericDetector* readplaneSD5
 		= new remollGenericDetector("ReadPlaneSD_5",5);
@@ -245,28 +253,28 @@ G4VPhysicalVolume* remollDetectorConstruction::Construct()
 
 
 	G4LogicalVolume* readplane6_log
-		= new G4LogicalVolume(readplane_cyl,Air,"ReadPlane6",0,0,0);
+		= new G4LogicalVolume(readplane_cyl,g4vacuum,"ReadPlane6",0,0,0);
 	remollGenericDetector* readplaneSD6 
 		= new remollGenericDetector("ReadPlaneSD_6",6);
 	SDman->AddNewDetector(readplaneSD6);
 	readplane6_log->SetSensitiveDetector(readplaneSD6);
 
 	G4LogicalVolume* readplane7_log
-		= new G4LogicalVolume(readplane_cyl,Air,"ReadPlane7",0,0,0);
+		= new G4LogicalVolume(readplane_cyl,g4vacuum,"ReadPlane7",0,0,0);
 	remollGenericDetector* readplaneSD7 
 		= new remollGenericDetector("ReadPlaneSD_7",7);
 	SDman->AddNewDetector(readplaneSD7);
 	readplane7_log->SetSensitiveDetector(readplaneSD7);
 
 	G4LogicalVolume* readplane8_log
-		= new G4LogicalVolume(readplane_cyl,Air,"ReadPlane8",0,0,0);
+		= new G4LogicalVolume(readplane_cyl,g4vacuum,"ReadPlane8",0,0,0);
 	remollGenericDetector* readplaneSD8 
 		= new remollGenericDetector("ReadPlaneSD_8",8);
 	SDman->AddNewDetector(readplaneSD8);
 	readplane8_log->SetSensitiveDetector(readplaneSD8);
 
 	G4LogicalVolume* readplane9_log
-		= new G4LogicalVolume(readplane_cyl,Air,"ReadPlane9",0,0,0);
+		= new G4LogicalVolume(readplane_cyl,g4vacuum,"ReadPlane9",0,0,0);
 	remollGenericDetector* readplaneSD9 
 		= new remollGenericDetector("ReadPlaneSD_9",9);
 	SDman->AddNewDetector(readplaneSD9);
@@ -277,13 +285,20 @@ G4VPhysicalVolume* remollDetectorConstruction::Construct()
 		= new G4RotationMatrix;
 	rotRead->rotateZ(0.*deg);
 
-	G4VPhysicalVolume* readplane_phys5
+/*	G4VPhysicalVolume* readplane_phys5                   //detector 5 
+		= new G4PVPlacement(rotRead,G4ThreeVector(0.,0.,readplane_z_pos),readplane5_log,"ReadPlane5",
+			det_log,false,0);
+ */               
+ 
+        //change in positions of the detector can be made here
+
+        G4VPhysicalVolume* readplane_phys5
 		= new G4PVPlacement(rotRead,G4ThreeVector(0.,0.,readplane_z_pos),readplane5_log,"ReadPlane5",
 			det_log,false,0);
 
 	G4VPhysicalVolume* readplane_phys6
 		= new G4PVPlacement(rotRead,G4ThreeVector(0.,0.,readplane_z_pos+30*cm),readplane6_log,"ReadPlane6",
-			det_log,false,0);
+			det_log,false,0);//detector 6
 
 	G4VPhysicalVolume* readplane_phys7
 		= new G4PVPlacement(rotRead,G4ThreeVector(0.,0.,100*cm),readplane7_log,"ReadPlane7",
@@ -295,7 +310,7 @@ G4VPhysicalVolume* remollDetectorConstruction::Construct()
 
 	G4VPhysicalVolume* readplane_phys9
 		= new G4PVPlacement(rotRead,G4ThreeVector(0.,0.,110*cm+1*m/sqrt(2.0)),readplane9_log,"ReadPlane9",
-			det_log,false,0);
+			det_log,false,0); //detector 9
 
 	/////
 	// Place the detector volume
@@ -314,6 +329,7 @@ G4VPhysicalVolume* remollDetectorConstruction::Construct()
 	
 	return world_phys;
 }
+
 /*
 G4int remollDetectorConstruction::UpdateCopyNo(G4VPhysicalVolume* aVolume,G4int index){
 	aVolume->SetCopyNo(index);
@@ -347,11 +363,25 @@ void remollDetectorConstruction::DumpGeometricalTree(G4VPhysicalVolume* aVolume,
 void remollDetectorConstruction::CreateGlobalMagneticField() {
 	fGlobalField = new remollGlobalField();
         
-        //Create default quadrupole and dipole fields.        
+        //Create default quadrupole and dipole fields.     
+   
+/*
         remollQuadField *quad = new remollQuadField(G4ThreeVector(0.0,0.0,55.0*cm), G4ThreeVector(0.1*m, 0.1*m, 15.0*cm), 0.1*m, 0.163*tesla);
         //Points above y = 0 are negative, below y = 0 are positive
         remollDipoleField *dipoleNeg = new remollDipoleField(G4ThreeVector(0.0, 2.0*m, 105.0*cm), G4ThreeVector(2.0*m, 2.0*m, 5.0*cm), -1.65*tesla);
         remollDipoleField *dipolePos = new remollDipoleField(G4ThreeVector(0.0, -2.0*m, 105.0*cm), G4ThreeVector(2.0*m, 2.0*m, 5.0*cm), 1.65*tesla);
+
+*/
+
+	remollQuadField *quad = new remollQuadField(G4ThreeVector(0.0,0.0,55.0*cm), G4ThreeVector(0.1*m, 0.1*m, 15.0*cm), 0.1*m, 0*tesla);
+        //Points above y = 0 are negative, below y = 0 are positive
+        remollDipoleField *dipoleNeg = new remollDipoleField(G4ThreeVector(0.0, 2.0*m, 105.0*cm), G4ThreeVector(2.0*m, 2.0*m, 5.0*cm), 0*tesla);
+        remollDipoleField *dipolePos = new remollDipoleField(G4ThreeVector(0.0, -2.0*m, 105.0*cm), G4ThreeVector(2.0*m, 2.0*m, 5.0*cm), 0*tesla);
+
+
+
+
+
         
         //Add new fields to their respective arrays
         fQuadFields[0] = quad;
