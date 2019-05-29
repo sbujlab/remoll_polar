@@ -29,6 +29,12 @@ class remollDetectorConstruction : public G4VUserDetectorConstruction
 	public:
 		G4VPhysicalVolume* Construct();
 
+                G4VPhysicalVolume* ConstructDipole();
+                G4VPhysicalVolume* ConstructChicane();
+                void CreateGlobalMagneticFieldChicane();
+                void CreateGlobalMagneticFieldDipole();
+  
+
 		void CreateGlobalMagneticField();
 
 		void SetDetectorGeomFile(const G4String&);
