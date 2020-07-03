@@ -27,7 +27,8 @@
 /remoll/addfield Map.dat
 # change field map paramters
 #/remoll/scalefield map_directory/blockyHybrid_rm_3.0.txt -1.0
-/remoll/scalefield Map.dat -1.0
+#/remoll/scalefield Map.dat -1.0
+/remoll/scalefield Map.dat -0.5
 #/remoll/scalefield Map.dat 0.0
 #/remoll/magcurrent map_directory/blockyHybrid_rm_3.0.txt 1000.0 A
 
@@ -113,8 +114,9 @@
 
 #  output filename
 #/remoll/filename remollout.root
-/remoll/filename p2moller_design2_negquad_moller_100k.root
+/remoll/filename p2moller_design2_4T_negquad_moller_100k.root
+#/remoll/filename p2moller_design2_negquad_limited_ep_100k.root
 
-/run/beamOn 10000
+/run/beamOn 100000
 
 
